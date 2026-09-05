@@ -1,0 +1,46 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+.env.*
+!.env.example
+.eggs/
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata
+*.whl
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Storage
+storage/uploads/
+storage/exports/
+*.log
+tmp/
+temp/
+
+# Docker
+docker-compose.override.yml

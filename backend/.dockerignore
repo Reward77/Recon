@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist
+build
+pip-wheel-metadata
+*.whl
+
+# Virtual environments
+venv/
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+
+# Storage (handled by volumes)
+storage/uploads/
+storage/exports/
+
+# Documentation (unnecessary in container)
+*.md
+docs/
+
+# Misc
+*.log
+tmp/
+temp/

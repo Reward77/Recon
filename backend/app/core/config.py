@@ -1,0 +1,100 @@
+import os
+
+from dotenv import load_dotenv
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from pathlib import Path
+
+load_dotenv()
+
+class Settings(BaseSettings):
+
+    APP_NAME: str = "Recon API"
+
+    # Set this in .env. PostgreSQL is the supported runtime database; SQLite
+    # remains useful only when explicitly selected for isolated local tests.
+    DATABASE_URL: str = "postgresql+psycopg2://recon:recon@localhost:5432/recon"
+
+    SECRET_KEY: str
+
+    ALGORITHM: str = "HS256"
+
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    CORS_ORIGINS: str = "http://localhost:5500,http://127.0.0.1:5500"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+
+    FRONTEND_URL: str = "http://127.0.0.1:5500"
+    PASSWORD_RESET_EXPIRE_MINUTES: int = 30
+    SMTP_HOST: str | None = None
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str | None = None
+    SMTP_PASSWORD: str | None = None
+    SMTP_FROM_EMAIL: str | None = None
+    SMTP_USE_TLS: bool = True
+    ENVIRONMENT: str = "development"
+    LOGIN_MAX_ATTEMPTS: int = 5
+    LOGIN_LOCKOUT_MINUTES: int = 15
+    PAYSTACK_SECRET_KEY: str | None = None
+    PAYSTACK_PUBLIC_KEY: str | None = None
+    PAYSTACK_PRO_PLAN_CODE: str | None = None
+    PAYSTACK_PRO_ANNUAL_PLAN_CODE: str | None = None
+    PAYSTACK_WEBHOOK_SECRET: str | None = None
+    SUBSCRIPTION_GRACE_DAYS: int = 3
+
+    LOG_LEVEL: str = "INFO"
+    SENTRY_DSN: str | None = None
+    ENABLE_METRICS: bool = True
+
+    RECONCILIATION_MODE: str = "sync"
+    REDIS_URL: str | None = None
+
+    STORAGE_BACKEND: str = "local"
+    S3_BUCKET: str | None = None
+    S3_REGION: str | None = None
+    S3_ENDPOINT_URL: str | None = None
+    AWS_ACCESS_KEY_ID: str | None = None
+    AWS_SECRET_ACCESS_KEY: str | None = None
+    AWS_DEFAULT_REGION: str | None = None
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENVIRONMENT.lower() in {"production", "prod"}
+
+    @property
+    def database_echo(self) -> bool:
+        return not self.is_production
+
+    model_config = SettingsConfigDict(
+        env_file=Path(__file__).resolve().parents[2] / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+        case_sensitive=True,
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if self.is_production and not self.SECRET_KEY:
+            raise RuntimeError("SECRET_KEY must be set in production.")
+        if self.is_production and self.SECRET_KEY == "dev-secret-key":
+            raise RuntimeError("Refusing to start in production with the default SECRET_KEY.")
+
+
+settings = Settings()
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+UPLOAD_ROOT = BASE_DIR / "storage" / "uploads"
+
+MAX_UPLOAD_SIZE = 100 * 1024 * 1024
+
+ALLOWED_EXTENSIONS = {
+    ".csv",
+    ".xlsx",
+    ".xls"
+}

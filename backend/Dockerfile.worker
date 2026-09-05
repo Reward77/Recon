@@ -1,0 +1,47 @@
+# =============================================================================
+# Stage 1: Builder - Install dependencies
+# =============================================================================
+FROM python:3.12-slim AS builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# =============================================================================
+# Stage 2: Runtime - Minimal production worker image
+# =============================================================================
+FROM python:3.12-slim AS runtime
+
+WORKDIR /app
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin appuser \
+    && chown -R appuser:appuser /app
+
+# Copy installed dependencies
+COPY --from=builder /install /usr/local
+
+# Copy application code
+COPY --chown=appuser:appuser . .
+
+# Create directories for runtime
+RUN mkdir -p storage/uploads /tmp/celery \
+    && chown -R appuser:appuser storage /tmp/celery
+
+# Switch to non-root user
+USER appuser
+
+# No exposed port for worker
+
+# Health check - verify worker is responsive
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD celery -A app.core.celery_app inspect ping || exit 1
+
+# Default command - run celery worker
+CMD ["celery", "-A", "app.core.celery_app", "worker", "--loglevel=INFO", "--concurrency=4", "--max-tasks-per-child=100", "--time-limit=1800", "--soft-time-limit=1740", "--pool=solo"]

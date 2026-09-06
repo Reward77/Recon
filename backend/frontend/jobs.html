@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Recon - Jobs</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/app-shell.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <h2>Recon</h2>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="jobs.html" class="active">Reconciliation Jobs</a>
+            <a href="uploads.html">Uploads</a>
+            <a href="mapping.html">Column Mapping</a>
+            <a href="manage_staff.html">Manage Staff</a>
+        </nav>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <h1>Reconciliation Jobs</h1>
+                <p>Create and manage your reconciliation jobs.</p>
+            </div>
+
+            <button class="primary-btn" onclick="openCreateJobModal()">
+                + New Reconciliation Job
+            </button>
+
+        </header>
+
+
+        <!-- KPI CARDS -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <span>Total Jobs</span>
+                <strong id="totalJobs">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>Pending</span>
+                <strong id="pendingJobs">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>Processing</span>
+                <strong id="processingJobs">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <span>Completed</span>
+                <strong id="completedJobs">0</strong>
+            </div>
+
+        </section>
+
+
+        <!-- JOBS TABLE -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <h2>Reconciliation Jobs</h2>
+                    <p>Manage your company's reconciliation processes.</p>
+                </div>
+
+                <button class="secondary-btn" onclick="loadJobs()">
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table id="jobsTable">
+
+                    <thead>
+
+                        <tr>
+                            <th>Job Name</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- CREATE JOB MODAL -->
+
+<div id="createJobModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Create Reconciliation Job</h2>
+
+            <button onclick="closeCreateJobModal()">&times;</button>
+
+        </div>
+
+
+        <form id="createJobForm">
+
+            <label for="jobName">
+                Job Name
+            </label>
+
+            <input
+                type="text"
+                id="jobName"
+                placeholder="e.g. July 2026 Bank Reconciliation"
+                required
+            >
+
+
+            <label for="jobDescription">
+                Description
+            </label>
+
+            <textarea
+                id="jobDescription"
+                placeholder="Optional description"
+                rows="4"
+            ></textarea>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeCreateJobModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Create Job
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/jobs.js"></script>
+
+<script src="js/app-shell.js"></script>
+</body>
+</html>

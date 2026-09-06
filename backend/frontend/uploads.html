@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Uploads - Recon</title>
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/app-shell.css">
+
+    <link
+        rel="stylesheet"
+        href="css/uploads.css"
+    >
+    <link rel="stylesheet" href="css/app-shell.css">
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Recon<span>Flow</span>
+        </div>
+
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="jobs.html">
+                Reconciliation Jobs
+            </a>
+
+            <a
+                href="uploads.html"
+                class="active"
+            >
+                Uploads
+            </a>
+
+            <a href="mapping.html">
+                Column Mapping
+            </a>
+
+            <a href="results.html">
+                Results
+            </a>
+
+            <a href="manage_staff.html">
+                Manage Staff
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                onclick="logout()"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Uploads</h1>
+
+                <p>
+                    Upload and manage transaction files
+                    for your reconciliation jobs.
+                </p>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- STATISTICS -->
+
+        <section class="upload-stats">
+
+
+            <div class="upload-stat">
+
+                <span>Total Uploads</span>
+
+                <strong id="totalUploads">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="upload-stat">
+
+                <span>Company Files</span>
+
+                <strong id="companyUploads">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="upload-stat">
+
+                <span>Processor Files</span>
+
+                <strong id="processorUploads">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="upload-stat">
+
+                <span>Processing</span>
+
+                <strong id="processingUploads">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- UPLOAD PANEL -->
+
+        <section class="upload-panel">
+
+
+            <div class="panel-title">
+
+                <div>
+
+                    <h2>
+                        Upload Transaction Files
+                    </h2>
+
+                    <p>
+                        Select a reconciliation job and
+                        upload the files required for matching.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <form id="uploadForm">
+
+                <div class="upload-form-grid">
+
+                    <!-- JOB -->
+                    <div class="form-group">
+
+                        <label for="jobSelect">
+                            Reconciliation Job
+                        </label>
+
+                        <select
+                            id="jobSelect"
+                            required
+                        >
+                            <option value="">
+                                Select a job
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <!-- FILE TYPE -->
+                    <div class="file-type-selection">
+
+                    <label>
+                        File Type
+                    </label>
+
+
+                    <div class="type-options">
+
+
+                        <label class="type-option">
+
+                            <input
+                                type="radio"
+                                name="file_type"
+                                value="company"
+                                checked
+                            >
+
+                            <div class="type-card">
+
+                                <div class="type-icon">
+                                    C
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Company File
+                                    </strong>
+
+                                    <span>
+                                        Your internal transaction records
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+
+
+                        <label class="type-option">
+
+                            <input
+                                type="radio"
+                                name="file_type"
+                                value="processor"
+                            >
+
+                            <div class="type-card">
+
+                                <div class="type-icon processor">
+                                    P
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Processor File
+                                    </strong>
+
+                                    <span>
+                                        Payment processor transaction records
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+
+                    </div>
+
+                    <div class="form-group processor-group" style="display:none;">
+
+                        <label for="processorSelect">
+                            Processor
+                        </label>
+
+                        <select id="processorSelect">
+                            <option value="">
+                                Select a processor
+                            </option>
+                        </select>
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            onclick="openCreateProcessorModal()"
+                            style="margin-top: 12px;"
+                        >
+                            + Add processor
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DROPZONE -->
+
+                <div
+                    id="dropZone"
+                    class="drop-zone"
+                >
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        accept=".csv,.xls,.xlsx"
+                        hidden
+                    >
+
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+
+                    <h3>
+                        Drop your file here
+                    </h3>
+
+
+                    <p>
+                        or click to browse your computer
+                    </p>
+
+
+                    <span>
+                        CSV, XLS and XLSX files
+                    </span>
+
+
+                    <button
+                        type="button"
+                        id="browseBtn"
+                        class="secondary-btn"
+                    >
+                        Browse Files
+                    </button>
+
+                </div>
+
+
+
+                <!-- SELECTED FILE -->
+
+                <div
+                    id="selectedFile"
+                    class="selected-file"
+                    style="display:none;"
+                >
+
+                    <div class="file-info">
+
+                        <div id="fileSymbol" class="file-symbol company">
+                            C
+                        </div>
+
+                        <div>
+
+                            <strong id="fileName">
+                                file.xlsx
+                            </strong>
+
+                            <span id="fileMeta" class="file-meta">
+                                Company file • 0 KB
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="removeFile"
+                        class="remove-file"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+
+                <!-- PROGRESS -->
+
+                <div
+                    id="uploadProgressContainer"
+                    class="upload-progress"
+                    style="display:none;"
+                >
+
+                    <div class="progress-header">
+
+                        <span>
+                            Uploading...
+                        </span>
+
+                        <span id="progressPercent">
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-track">
+
+                        <div
+                            id="progressBar"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        id="uploadBtn"
+                        class="primary-btn"
+                    >
+                        Upload File
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- UPLOAD HISTORY -->
+
+        <section class="panel uploads-history">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Uploaded Files
+                    </h2>
+
+                    <p>
+                        Files associated with your reconciliation jobs.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="secondary-btn"
+                    onclick="loadUploads()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+                <table id="uploadsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                File
+                            </th>
+
+                            <th>
+                                Job
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Size
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Uploaded
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script src="js/api.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/uploads.js"></script>
+
+
+<!-- CREATE PROCESSOR MODAL -->
+<div id="createProcessorModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Create Processor</h2>
+            <button onclick="closeCreateProcessorModal()">×</button>
+        </div>
+
+        <form id="createProcessorForm">
+            <label for="processorName">Processor Name</label>
+            <input
+                type="text"
+                id="processorName"
+                placeholder="e.g. Stripe"
+                required
+            >
+
+            <label for="processorDescription">Description</label>
+            <textarea
+                id="processorDescription"
+                placeholder="Optional description"
+                rows="4"
+            ></textarea>
+
+            <div class="modal-actions">
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeCreateProcessorModal()"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Create Processor
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="js/app-shell.js"></script>
+</body>
+
+</html>

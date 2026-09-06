@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Recon Dashboard</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app-shell.css">
+
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="brand">
+
+        Recon
+
+    </div>
+
+    <ul>
+        <li class="active">
+            <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        </li>
+        <li>
+            <a href="jobs.html"><i class="bi bi-folder2-open"></i> Jobs</a>
+        </li>
+        <li>
+            <a href="uploads.html"><i class="bi bi-cloud-upload"></i> Uploads</a>
+        </li>
+        <li>
+            <a href="mapping.html"><i class="bi bi-columns-gap"></i> Mapping</a>
+        </li>
+        <li>
+            <a href="manage_staff.html"><i class="bi bi-people"></i> Manage Staff</a>
+        </li>
+        <li>
+            <a href="reconciliation.html"><i class="bi bi-arrow-left-right"></i> Reconcile</a>
+        </li>
+        <li>
+            <a href="results.html"><i class="bi bi-table"></i> Results</a>
+        </li>
+        <li>
+            <a href="subscription.html"><i class="bi bi-credit-card"></i> Subscription</a>
+        </li>
+        <li>
+            <a href="settings.html"><i class="bi bi-gear"></i> Settings</a>
+        </li>
+    </ul>
+
+</div>
+
+<div class="content">
+
+    <div class="topbar">
+
+        <input
+        placeholder="Search">
+
+        <div class="profile">
+
+            <span id="username">
+
+            Loading...
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <h1>
+
+        Dashboard
+
+    </h1>
+
+    <div class="cards">
+
+        <div class="kpi">
+
+            <h2 id="jobs">
+
+                0
+
+            </h2>
+
+            <p>Total Jobs</p>
+
+        </div>
+
+        <div class="kpi">
+
+            <h2 id="matched">
+
+                0
+
+            </h2>
+
+            <p>Matched</p>
+
+        </div>
+
+        <div class="kpi">
+
+            <h2 id="mismatch">
+
+                0
+
+            </h2>
+
+            <p>Mismatches</p>
+
+        </div>
+
+        <div class="kpi">
+
+            <h2 id="uploads">
+
+                0
+
+            </h2>
+
+            <p>Files Uploaded</p>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+
+            Recent Jobs
+
+        </h2>
+
+        <table id="jobsTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="js/api.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/dashboard.js"></script>
+
+
+<script src="js/app-shell.js"></script>
+</body>
+
+</html>

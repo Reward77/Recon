@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Column Mapping - Recon</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/mapping.css">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/app-shell.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Recon<span>Flow</span>
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="jobs.html">
+                Reconciliation Jobs
+            </a>
+
+            <a href="uploads.html">
+                Uploads
+            </a>
+
+            <a href="mapping.html" class="active">
+                Column Mapping
+            </a>
+
+            <a href="results.html">
+                Results
+            </a>
+
+            <a href="manage_staff.html">
+                Manage Staff
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button
+                onclick="logout()"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Column Mapping</h1>
+
+                <p>
+                    Tell Recon which columns contain the
+                    transaction information required for reconciliation.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- JOB SELECTION -->
+
+        <section class="mapping-panel">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>1. Select Reconciliation Job</h2>
+
+                    <p>
+                        Select the job whose uploaded files you want to map.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <select id="jobSelect" class="mapping-select">
+
+                <option value="">
+                    Select a reconciliation job
+                </option>
+
+            </select>
+
+        </section>
+
+
+        <!-- FILE SELECTION -->
+
+        <section
+            id="fileSection"
+            class="mapping-panel"
+            style="display:none;"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>2. Select Files</h2>
+
+                    <p>
+                        Choose the company and processor files for this job.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="file-selection-grid">
+
+
+                <div class="file-selection-card">
+
+                    <div class="file-card-header">
+
+                        <div class="mapping-file-icon company">
+                            C
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Company File
+                            </strong>
+
+                            <span>
+                                Internal transaction records
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <select
+                        id="companyFile"
+                        class="mapping-select"
+                    >
+
+                        <option value="">
+                            Select company file
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="file-selection-card">
+
+                    <div class="file-card-header">
+
+                        <div class="mapping-file-icon processor">
+                            P
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Processor File
+                            </strong>
+
+                            <span>
+                                Payment processor records
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <select
+                        id="processorFile"
+                        class="mapping-select"
+                        multiple
+                        size="5"
+                    >
+
+                        <option value="">
+                            Select one or more processor files
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="file-preview-row">
+                <div class="file-preview-card">
+                    <div class="file-card-icon company">C</div>
+                    <div>
+                        <strong>Company file</strong>
+                        <span id="companyFileName">No file selected</span>
+                    </div>
+                </div>
+                <div class="file-preview-card">
+                    <div class="file-card-icon processor">P</div>
+                    <div>
+                        <strong>Processor file</strong>
+                        <span id="processorFileName">No file selected</span>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                id="detectColumnsBtn"
+                class="primary-btn"
+            >
+                Detect Columns
+            </button>
+
+        </section>
+
+
+        <!-- MAPPING -->
+
+        <section
+            id="mappingSection"
+            class="mapping-panel"
+            style="display:none;"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>3. Map Transaction Fields</h2>
+
+                    <p>
+                        Match the required reconciliation fields
+                        between your company and processor files.
+                    </p>
+
+                </div>
+
+                <div id="mappingStatus">
+                    Not saved
+                </div>
+
+            </div>
+
+
+            <div class="mapping-info">
+
+                <strong>
+                    Required fields
+                </strong>
+
+                <span>
+                    Transaction ID and Amount are required.
+                    Date and Reference are optional.
+                </span>
+
+            </div>
+
+            <div class="mapping-info">
+                <strong>Processor file being mapped</strong>
+                <select id="mappingProcessorFile" class="mapping-select"></select>
+            </div>
+
+
+            <div class="mapping-table-wrapper">
+
+                <table class="mapping-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Recon Field
+                            </th>
+
+                            <th>
+                                Company File Column
+                            </th>
+
+                            <th>
+                                Processor File Column
+                            </th>
+
+                            <th>
+                                Required
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="field-name">
+
+                                    <strong>
+                                        Transaction ID
+                                    </strong>
+
+                                    <span>
+                                        Unique transaction identifier
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="company_transaction_id"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="processor_transaction_id"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <span class="required-badge">
+                                    Required
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="field-name">
+
+                                    <strong>
+                                        Amount
+                                    </strong>
+
+                                    <span>
+                                        Transaction amount
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="company_amount"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="processor_amount"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <span class="required-badge">
+                                    Required
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="field-name">
+
+                                    <strong>
+                                        Date
+                                    </strong>
+
+                                    <span>
+                                        Transaction date
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="company_date"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="processor_date"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <span class="optional-badge">
+                                    Optional
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="field-name">
+
+                                    <strong>
+                                        Status
+                                    </strong>
+
+                                    <span>
+                                        Transaction status
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="company_status"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="processor_status"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <span class="required-badge">
+                                    Required
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <div class="field-name">
+
+                                    <strong>
+                                        Reference
+                                    </strong>
+
+                                    <span>
+                                        Additional transaction reference
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="company_reference"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <select
+                                    id="processor_reference"
+                                    class="column-select"
+                                >
+
+                                    <option value="">
+                                        Select column
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <td>
+
+                                <span class="optional-badge">
+                                    Optional
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="mapping-actions">
+
+                <button
+                    id="resetMappingBtn"
+                    class="secondary-btn"
+                >
+                    Reset
+                </button>
+
+                <button
+                    id="saveMappingBtn"
+                    class="primary-btn"
+                >
+                    Save Mapping
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUMMARY -->
+
+        <section
+            id="mappingSummary"
+            class="mapping-panel success-panel"
+            style="display:none;"
+        >
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <h3>
+                    Mapping saved successfully
+                </h3>
+
+                <p>
+                    This job is now ready for reconciliation.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/mapping.js"></script>
+
+<script src="js/app-shell.js"></script>
+</body>
+
+</html>

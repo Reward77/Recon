@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
+:root {
+  --rf-brand-700: #15573f;
+  --rf-brand-600: #1e6b51;
+  --rf-brand-100: #e4f0e8;
+  --rf-accent-500: #d8962f;
+  --rf-canvas: #f7f8f5;
+  --rf-surface: #ffffff;
+  --rf-surface-subtle: #f1f4ef;
+  --rf-border: #dce3dc;
+  --rf-border-strong: #bcc8bd;
+  --rf-text: #172b22;
+  --rf-text-secondary: #617168;
+  --rf-text-muted: #87938c;
+  --rf-success: #19704d;
+  --rf-success-bg: #e5f4eb;
+  --rf-warning: #9a6216;
+  --rf-warning-bg: #fff3dc;
+  --rf-danger: #bd3a32;
+  --rf-danger-bg: #fce9e7;
+  --rf-info: #2b6392;
+  --rf-info-bg: #e8f2fa;
+  --rf-radius-sm: 6px;
+  --rf-radius-md: 10px;
+  --rf-radius-lg: 14px;
+  --rf-shadow-sm: 0 1px 2px rgb(23 43 34 / 6%);
+  --rf-shadow-md: 0 10px 30px rgb(23 43 34 / 8%);
+}

@@ -383,3 +383,19 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["Authorization", "Content-Type", "X-Request-Id", "X-CSRF-Token"],
 )
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR / "frontend"
+
+print("Frontend directory:", FRONTEND_DIR)
+print("Frontend exists:", FRONTEND_DIR.exists())
+
+if FRONTEND_DIR.exists():
+    app.mount(
+        "/",
+        StaticFiles(
+            directory=str(FRONTEND_DIR),
+            html=True
+        ),
+        name="frontend"
+    )
